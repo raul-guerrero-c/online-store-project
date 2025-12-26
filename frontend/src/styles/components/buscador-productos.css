@@ -1,0 +1,24 @@
+/* src/styles/components/buscador-productos.css */
+
+/* ----- Buscador de productos (BEM: buscador-productos__*) ----- */
+
+.buscador-productos {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    flex: 2;
+    min-width: 220px;
+  }
+  
+  .buscador-productos__etiqueta {
+    font-size: 0.85rem;
+    color: #555555;
+  }
+  
+  .buscador-productos__campo {
+    padding: 0.45rem 0.75rem;
+    border-radius: 999px;
+    border: 1px solid #bdbdbd;
+    font-size: 0.9rem;
+  }
+  

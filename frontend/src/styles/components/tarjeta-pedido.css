@@ -1,0 +1,132 @@
+/* src/styles/components/tarjeta-pedido.css */
+
+/* ----- Tarjeta de pedido (BEM: tarjeta-pedido__*) ----- */
+
+.tarjeta-pedido {
+    padding: 1rem;
+    border-radius: 0.9rem;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .tarjeta-pedido__encabezado {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  .tarjeta-pedido__titulo {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  
+  .tarjeta-pedido__detalle {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    font-size: 0.85rem;
+    color: #555555;
+  }
+  
+  .tarjeta-pedido__total {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+  
+  .tarjeta-pedido__lineas {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .tarjeta-pedido__linea {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.5rem 0.6rem;
+    border-radius: 0.6rem;
+    background-color: #fafafa;
+    border: 1px solid #eeeeee;
+  }
+  
+  .tarjeta-pedido__linea--devuelta {
+    background-color: #e8f5e9;
+    border-color: #a5d6a7;
+  }
+  
+  .tarjeta-pedido__linea-contenido {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+  }
+  
+  .tarjeta-pedido__miniatura-contenedor {
+    width: 48px;
+    height: 48px;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    background-color: #f5f5f5;
+    flex-shrink: 0;
+  }
+  
+  .tarjeta-pedido__miniatura {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .tarjeta-pedido__linea-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+  
+  .tarjeta-pedido__linea-nombre {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+  
+  .tarjeta-pedido__linea-detalle {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #555555;
+  }
+  
+  .tarjeta-pedido__linea-acciones {
+    display: flex;
+    align-items: center;
+  }
+  
+  .tarjeta-pedido__boton-devolver {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.7rem;
+    border-radius: 999px;
+    border: 1px solid #1976d2;
+    background-color: #ffffff;
+    color: #1976d2;
+    cursor: pointer;
+    transition:
+      background-color 0.15s ease,
+      color 0.15s ease,
+      border-color 0.15s ease;
+  }
+  
+  .tarjeta-pedido__boton-devolver:hover {
+    background-color: #e3f2fd;
+  }
+  
+  .tarjeta-pedido__etiqueta-devuelto {
+    font-size: 0.8rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+    background-color: #43a047;
+    color: #ffffff;
+  }
+  

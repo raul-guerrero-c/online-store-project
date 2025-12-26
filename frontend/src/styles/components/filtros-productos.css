@@ -1,0 +1,54 @@
+/* src/styles/components/filtros-productos.css */
+
+/* ----- Filtros de productos (BEM: filtros-productos__*) ----- */
+
+.filtros-productos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: flex-end;
+    flex: 3;
+  }
+  
+  .filtros-productos__grupo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    min-width: 160px;
+  }
+  
+  .filtros-productos__grupo--acciones {
+    align-self: flex-start;
+  }
+  
+  .filtros-productos__etiqueta {
+    font-size: 0.85rem;
+    color: #555555;
+  }
+  
+  .filtros-productos__select {
+    padding: 0.35rem 0.6rem;
+    border-radius: 0.5rem;
+    border: 1px solid #bdbdbd;
+    font-size: 0.9rem;
+    background-color: #ffffff;
+  }
+  
+  .filtros-productos__boton-limpiar {
+    padding: 0.35rem 0.8rem;
+    border-radius: 999px;
+    border: 1px solid #1976d2;
+    background-color: #ffffff;
+    color: #1976d2;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition:
+      background-color 0.15s ease,
+      color 0.15s ease,
+      border-color 0.15s ease;
+  }
+  
+  .filtros-productos__boton-limpiar:hover {
+    background-color: #e3f2fd;
+  }
+  

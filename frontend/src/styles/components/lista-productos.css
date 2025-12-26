@@ -1,0 +1,27 @@
+/* src/styles/components/lista-productos.css */
+
+/* ----- Lista de productos (BEM: lista-productos__*) ----- */
+
+.lista-productos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1.2rem;
+  }
+  
+  .lista-productos__item {
+    display: flex;
+  }
+  
+  .lista-productos--vacia {
+    padding: 1rem;
+    border-radius: 0.75rem;
+    background-color: #ffffff;
+    border: 1px dashed #bdbdbd;
+  }
+  
+  .lista-productos__mensaje-vacio {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #777777;
+  }
+  
