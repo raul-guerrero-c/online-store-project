@@ -1,0 +1,47 @@
+# backend/cloud-gateway/src/main/resources/application.yml
+
+server:
+  port: 8081
+
+spring:
+  application:
+    name: cloud-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        # Ruta lógica hacia el microservicio de búsqueda (search-service)
+        - id: search-service
+          uri: lb://search-service
+          predicates:
+            - Path=/api/search/**
+          filters:
+            - StripPrefix=1
+
+        # Ruta lógica hacia el microservicio operador (pedidos / devoluciones)
+        - id: operator-service
+          uri: lb://operator-service
+          predicates:
+            - Path=/api/orders/**
+          filters:
+            - StripPrefix=1
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    # En dev queremos que el gateway se registre en Eureka
+    register-with-eureka: true
+    fetch-registry: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: when_authorized
