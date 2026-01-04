@@ -1,0 +1,37 @@
+# backend/operator-service/src/main/resources/application.yml
+
+spring:
+  application:
+    name: operator-service  # Nombre del microservicio para Eureka
+
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/online_store?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    username: DeveloperUnir          # Ajusta según tu usuario de MySQL
+    password: DeveloperUnir   # <-- CAMBIAR por tu contraseña real
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none        # No tocar el esquema desde JPA, lo gestionan los scripts SQL
+    show-sql: true          # Para ver las queries en consola (útil en desarrollo)
+    properties:
+      hibernate:
+        format_sql: true
+
+server:
+  port: 8082                # Puerto local para operator-service
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    prefer-ip-address: true
+
+logging:
+  level:
+    org.springframework.jdbc.core: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql: TRACE
