@@ -12,7 +12,7 @@
 export const productos = [
   {
     id: 'p-001',
-    nombre: 'Audífonos inalámbricos con cancelación de ruido',
+    nombre: 'Audífonos inalámbricos con cancelación de ruido', // Wireless Noise-Cancelling Headphones
     fabricante: 'SoundWave',
     categoria: 'Audio',
     descripcionCorta:
