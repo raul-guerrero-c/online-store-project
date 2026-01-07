@@ -1,0 +1,5 @@
+com\project\onlinestore\search\repository\ProductRepository.class
+com\project\onlinestore\search\service\ProductService.class
+com\project\onlinestore\search\controller\ProductController.class
+com\project\onlinestore\search\model\Product.class
+com\project\onlinestore\search\SearchServiceApplication.class
