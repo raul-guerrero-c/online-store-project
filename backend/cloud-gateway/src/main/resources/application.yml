@@ -1,77 +1,10 @@
-# server:
-#   port: 8081
-
-# spring:
-#   application:
-#     name: cloud-gateway
-
-#   cloud:
-#     gateway:
-#       server:
-#         webflux:
-#           discovery:
-#             locator:
-#               enabled: true
-#               lower-case-service-id: true
-#           routes:
-#             - id: search-service
-#               uri: lb://search-service
-#               predicates:
-#                 - Path=/api/search/**
-#               filters:
-#                 - StripPrefix=2
-
-#             - id: operator-service
-#               uri: lb://operator-service
-#               predicates:
-#                 - Path=/api/orders/**
-#               filters:
-#                 - StripPrefix=2
-
-# eureka:
-#   client:
-#     service-url:
-#       defaultZone: http://localhost:8761/eureka
-#     register-with-eureka: true
-#     fetch-registry: true
-
-# management:
-#   endpoints:
-#     web:
-#       exposure:
-#         include: "*"
-
+# backend/cloud-gateway/src/main/resources/application.yml
 server:
   port: 8081
 
 spring:
   application:
     name: cloud-gateway
-
-  cloud:
-    gateway:
-      routes:
-        - id: search-service
-          uri: lb://SEARCH-SERVICE
-          predicates:
-            - Path=/api/search/**
-          filters:
-            - StripPrefix=2
-        - id: operator-service
-          uri: lb://OPERATOR-SERVICE
-          predicates:
-            - Path=/api/orders/**
-          filters:
-            - StripPrefix=2
-
-      discovery:
-        locator:
-          enabled: true
-          lower-case-service-id: true
-    discovery:
-      locator:
-        enabled: true
-        lower-case-service-id: true
 
 eureka:
   client:
@@ -82,11 +15,6 @@ eureka:
   instance:
     prefer-ip-address: true
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
 logging:
   level:
     org.springframework.cloud.gateway: DEBUG
