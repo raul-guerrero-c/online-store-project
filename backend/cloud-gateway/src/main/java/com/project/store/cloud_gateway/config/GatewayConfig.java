@@ -28,6 +28,11 @@ public class GatewayConfig {
                         .path("/api/orders", "/api/orders/**")
                         .filters(f -> f.stripPrefix(1)) // /api/orders -> /orders
                         .uri("lb://operator-service"))
+                // Ruta para operator-service: pedidos y devoluciones
+                .route("search-service", r -> r
+                        .path("/api/products", "/api/products/**")
+                        .filters(f -> f.stripPrefix(1)) // /api/orders -> /orders
+                        .uri("lb://search-service"))
                 // Ruta de prueba hacia httpbin.org
                 .route("test-route", r -> r
                         .path("/test/**")
