@@ -11,4 +11,5 @@ eureka:
     register-with-eureka: false
     fetch-registry: false
   server:
+    # Desactiva el modo de auto-preservación de Eureka para entornos de desarrollo/local
     enable-self-preservation: false
