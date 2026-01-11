@@ -1,0 +1,88 @@
+version: "3.9"
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: online-store-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    # No expongas MySQL a Internet (mantener interno)
+    command: --innodb-buffer-pool-size=256M
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - online-store-net
+
+  eureka-server:
+    build:
+      context: ./backend/eureka-server
+      dockerfile: Dockerfile
+    container_name: eureka-server
+    ports:
+      - "${EUREKA_PORT}:8761"
+    environment:
+      JAVA_TOOL_OPTIONS: "-Xms${JAVA_XMS} -Xmx${JAVA_XMX_EUREKA}"
+    depends_on:
+      - mysql
+    networks:
+      - online-store-net
+
+  operator-service:
+    build:
+      context: ./backend/operator-service
+      dockerfile: Dockerfile
+    container_name: operator-service
+    # opcional exponer al host (para debug). puedes quitarlo si solo usarás gateway.
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      JAVA_TOOL_OPTIONS: "-Xms${JAVA_XMS} -Xmx${JAVA_XMX_SERVICES}"
+    depends_on:
+      - mysql
+      - eureka-server
+    networks:
+      - online-store-net
+
+  search-service:
+    build:
+      context: ./backend/search-service
+      dockerfile: Dockerfile
+    container_name: search-service
+    # opcional exponer al host (para debug). puedes quitarlo si solo usarás gateway.
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      JAVA_TOOL_OPTIONS: "-Xms${JAVA_XMS} -Xmx${JAVA_XMX_SERVICES}"
+    depends_on:
+      - mysql
+      - eureka-server
+    networks:
+      - online-store-net
+
+  cloud-gateway:
+    build:
+      context: ./backend/cloud-gateway
+      dockerfile: Dockerfile
+    container_name: cloud-gateway
+    ports:
+      - "${GATEWAY_PORT}:8081"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      JAVA_TOOL_OPTIONS: "-Xms${JAVA_XMS} -Xmx${JAVA_XMX_SERVICES}"
+    depends_on:
+      - eureka-server
+      - operator-service
+      - search-service
+    networks:
+      - online-store-net
+
+networks:
+  online-store-net:
+
+volumes:
+  mysql_data:
