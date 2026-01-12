@@ -1,119 +1,107 @@
-// src/hooks/usePedidos.js
-import { useEffect, useState } from 'react';
-
-/**
- * Hook personalizado para gestionar pedidos simulados.
- * - Carga los pedidos desde localStorage.
- * - Permite registrar nuevos pedidos a partir del carrito.
- * - Permite marcar líneas como devueltas.
- */
-
-const CLAVE_STORAGE_PEDIDOS = 'pedidos';
-
-function crearIdPedido() {
-  return `PED-${Date.now()}`;
-}
-
-function crearIdLinea(indice) {
-  return `L-${indice + 1}`;
-}
+import { useState } from "react";
+import {
+  crearPedido,
+  obtenerPedidos,
+  obtenerPedidoPorId,
+  crearDevolucion,
+} from "../services/ordersApi.js";
 
 export function usePedidos() {
-  const [pedidos, setPedidos] = useState(() => {
-    if (typeof window === 'undefined') return [];
+  const [pedidos, setPedidos] = useState([]);
+  const [pedidoActual, setPedidoActual] = useState(null);
+  const [estaCargando, setEstaCargando] = useState(false);
+  const [error, setError] = useState(null);
 
+  async function cargarPedidos() {
     try {
-      const valorAlmacenado = window.localStorage.getItem(
-        CLAVE_STORAGE_PEDIDOS
-      );
-      return valorAlmacenado ? JSON.parse(valorAlmacenado) : [];
-    } catch (error) {
-      console.error('Error leyendo pedidos desde localStorage:', error);
-      return [];
+      setEstaCargando(true);
+      setError(null);
+      const data = await obtenerPedidos();
+      setPedidos(Array.isArray(data) ? data : []);
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setEstaCargando(false);
     }
-  });
+  }
 
-  // Sincronizamos los pedidos con localStorage cada vez que cambien.
-  useEffect(() => {
+  async function cargarPedidoPorId(id) {
     try {
-      window.localStorage.setItem(
-        CLAVE_STORAGE_PEDIDOS,
-        JSON.stringify(pedidos)
-      );
-    } catch (error) {
-      console.error('Error guardando pedidos en localStorage:', error);
+      setEstaCargando(true);
+      setError(null);
+      const data = await obtenerPedidoPorId(id);
+      setPedidoActual(data);
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setEstaCargando(false);
     }
-  }, [pedidos]);
+  }
+
+  async function confirmarPedido(pedido) {
+    try {
+      setEstaCargando(true);
+      setError(null);
+      const data = await crearPedido(pedido);
+      setPedidoActual(data);
+      return data;
+    } catch (e) {
+      setError(e.message);
+      throw e;
+    } finally {
+      setEstaCargando(false);
+    }
+  }
 
   /**
-   * Registra un nuevo pedido a partir de los ítems del carrito.
-   * Devuelve el id del pedido creado.
+   * Registra un pedido a partir de la estructura del carrito.
+   * itemsCarrito: array de items con { idProducto, cantidad, precioUnidad }
+   * Devuelve el pedido creado (response) y el id.
    */
-  const registrarPedidoDesdeCarrito = (itemsCarrito, totalGeneral, moneda) => {
-    if (!itemsCarrito || itemsCarrito.length === 0) {
-      return null;
+  async function registrarPedidoDesdeCarrito(itemsCarrito, totalGeneral, currency) {
+    if (!Array.isArray(itemsCarrito) || itemsCarrito.length === 0) {
+      throw new Error('El carrito está vacío');
     }
 
-    const idPedido = crearIdPedido();
-    const fecha = new Date().toISOString();
-
-    const lineas = itemsCarrito.map((item, indice) => ({
-      idLinea: crearIdLinea(indice),
-      idProducto: item.idProducto,
-      nombre: item.nombre,
-      cantidad: item.cantidad,
-      precioUnidad: item.precioUnidad,
-      moneda: item.moneda,
-      devuelto: false,
-    }));
-
-    const nuevoPedido = {
-      idPedido,
-      fecha,
-      total: totalGeneral,
-      moneda,
-      estado: 'COMPLETADO', // o "CON_DEVOLUCIONES" cuando haya alguna devolución
-      lineas,
+    const request = {
+      customerName: 'Cliente demo',
+      customerEmail: '',
+      customerPhone: '',
+      currency: currency || (itemsCarrito[0] && itemsCarrito[0].moneda) || 'MXN',
+      items: itemsCarrito.map((it) => ({
+        productId: Number(it.idProducto),
+        quantity: Number(it.cantidad),
+        unitPrice: Number(it.precioUnidad),
+      })),
     };
 
-    setPedidos((previos) => [...previos, nuevoPedido]);
+    // Usa confirmarPedido que llama a crearPedido y actualiza estado
+    const creado = await confirmarPedido(request);
+    return creado && creado.id ? creado.id : null;
+  }
 
-    return idPedido;
-  };
-
-  /**
-   * Marca una línea de un pedido como devuelta.
-   * Si alguna línea está devuelta, el estado del pedido pasa a "CON_DEVOLUCIONES".
-   */
-  const marcarLineaComoDevuelta = (idPedido, idLinea) => {
-    setPedidos((previos) =>
-      previos.map((pedido) => {
-        if (pedido.idPedido !== idPedido) return pedido;
-
-        const lineasActualizadas = pedido.lineas.map((linea) =>
-          linea.idLinea === idLinea
-            ? { ...linea, devuelto: true }
-            : linea
-        );
-
-        const tieneAlgunaDevuelta = lineasActualizadas.some(
-          (linea) => linea.devuelto
-        );
-
-        return {
-          ...pedido,
-          lineas: lineasActualizadas,
-          estado: tieneAlgunaDevuelta
-            ? 'CON_DEVOLUCIONES'
-            : pedido.estado,
-        };
-      })
-    );
-  };
+  async function devolverPedido(orderId, motivo) {
+    try {
+      setEstaCargando(true);
+      setError(null);
+      return await crearDevolucion(orderId, motivo);
+    } catch (e) {
+      setError(e.message);
+      throw e;
+    } finally {
+      setEstaCargando(false);
+    }
+  }
 
   return {
     pedidos,
+    pedidoActual,
+    estaCargando,
+    error,
+    cargarPedidos,
+    cargarPedidoPorId,
+    confirmarPedido,
     registrarPedidoDesdeCarrito,
-    marcarLineaComoDevuelta,
+    devolverPedido,
   };
 }

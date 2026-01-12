@@ -77,6 +77,7 @@ export function CarritoProvider({ children }) {
         fabricante: producto.fabricante,
         precioUnidad: producto.precio,
         moneda: producto.moneda,
+        imagen: producto.imagen, // guardamos la url de imagen para mostrarla en el carrito
         cantidad: 1,
       };
 

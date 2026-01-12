@@ -36,7 +36,7 @@ export function CartPage() {
     quitarDelCarrito(idProducto);
   };
 
-  const manejarConfirmarCompra = () => {
+  const manejarConfirmarCompra = async () => {
     if (itemsCarrito.length === 0) {
       alert('El carrito está vacío. Agrega productos antes de comprar.');
       return;
@@ -45,19 +45,24 @@ export function CartPage() {
     const moneda =
       itemsCarrito.length > 0 ? itemsCarrito[0].moneda : 'USD';
 
-    const idPedido = registrarPedidoDesdeCarrito(
-      itemsCarrito,
-      totalGeneral,
-      moneda
-    );
+    try {
+      const idPedido = await registrarPedidoDesdeCarrito(
+        itemsCarrito,
+        totalGeneral,
+        moneda
+      );
 
-    alert(
-      `Compra confirmada.\n\nID de pedido: ${idPedido}\nArtículos: ${totalArticulos}\nTotal: ${moneda} ${totalGeneral.toFixed(
-        2
-      )}\n\nEste pedido estará disponible en la sección de "Devoluciones" para simular reembolsos.`
-    );
+      alert(
+        `Compra confirmada.\n\nID de pedido: ${idPedido}\nArtículos: ${totalArticulos}\nTotal: ${moneda} ${totalGeneral.toFixed(
+          2
+        )}\n\nEste pedido estará disponible en la sección de "Órdenes" para su revisión.`
+      );
 
-    vaciarCarrito();
+      vaciarCarrito();
+    } catch (e) {
+      console.error('Error creando pedido:', e);
+      alert(`No se pudo confirmar la compra: ${e.message || e}`);
+    }
   };
 
   const moneda =

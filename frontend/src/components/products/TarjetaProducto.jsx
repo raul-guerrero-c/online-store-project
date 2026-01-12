@@ -42,7 +42,7 @@ export function TarjetaProducto({ producto, alAgregarAlCarrito, alVerDetalle }) 
       <div className="tarjeta-producto__pie">
         <div className="tarjeta-producto__precio-contenedor">
           <span className="tarjeta-producto__precio">
-            {producto.moneda} {producto.precio.toFixed(2)}
+            {producto.moneda} {producto.precio}
           </span>
           <span className="tarjeta-producto__stock">
             Stock: {producto.stock}
