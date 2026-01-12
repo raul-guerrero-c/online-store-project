@@ -30,7 +30,7 @@ export function ResumenCarrito({
       </p>
 
       <p className="resumen-carrito__dato">
-        <strong>Total:</strong> {moneda} {totalGeneral.toFixed(2)}
+        <strong>Total:</strong> {moneda} {totalGeneral}
       </p>
 
       <div className="resumen-carrito__acciones">

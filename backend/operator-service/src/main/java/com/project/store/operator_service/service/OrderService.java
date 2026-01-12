@@ -23,6 +23,11 @@ public interface OrderService {
     OrderResponseDto getOrderById(Long orderId);
 
     /**
+     * Obtiene la lista completa de pedidos (sin paginación por ahora).
+     */
+    List<OrderResponseDto> getAllOrders();
+
+    /**
      * Registra una solicitud de devolución para un pedido concreto.
      */
     ReturnResponseDto createReturn(Long orderId, CreateReturnRequestDto request);

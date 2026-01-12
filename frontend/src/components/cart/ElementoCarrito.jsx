@@ -1,7 +1,6 @@
 // src/components/cart/ElementoCarrito.jsx
 import React from 'react';
 import '../../styles/components/elemento-carrito.css';
-import { obtenerProductoPorId } from '../../data/productos.js';
 
 /**
  * Representa una fila dentro del carrito de compras.
@@ -13,22 +12,23 @@ export function ElementoCarrito({
   alDecrementar,
   alEliminar,
 }) {
-  const producto = obtenerProductoPorId(item.idProducto);
-
   const manejarIncrementar = () => alIncrementar(item.idProducto);
   const manejarDecrementar = () => alDecrementar(item.idProducto);
   const manejarEliminar = () => alEliminar(item.idProducto);
 
   const subtotal = item.cantidad * item.precioUnidad;
 
+  // Preferimos la imagen almacenada en el elemento del carrito; si no existe, mostramos nada
+  const imagenSrc = item.imagen || '';
+
   return (
     <div className="elemento-carrito">
       <div className="elemento-carrito__cabecera">
         <div className="elemento-carrito__miniatura-contenedor">
-          {producto && (
+          {imagenSrc && (
             <img
-              src={producto.imagen}
-              alt={producto.nombre}
+              src={imagenSrc}
+              alt={item.nombre}
               className="elemento-carrito__miniatura"
               loading="lazy"
             />
@@ -45,7 +45,7 @@ export function ElementoCarrito({
 
       <div className="elemento-carrito__detalle">
         <span className="elemento-carrito__precio-unitario">
-          {item.moneda} {item.precioUnidad.toFixed(2)}
+          {item.moneda} {item.precioUnidad}
         </span>
 
         <div className="elemento-carrito__cantidad">

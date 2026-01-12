@@ -1,12 +1,9 @@
-// src/hooks/useProductos.js
-import { useEffect, useState } from 'react';
-import { productos as productosSimulados } from '../data/productos.js';
+import { useEffect, useState } from "react";
+import { obtenerProductos } from "../services/productsApi.js";
 
 /**
- * Hook personalizado para obtener el catálogo de productos.
- * Simula una llamada asíncrona (como si fuese una API REST),
- * preparando el código para una futura integración con base de datos
- * y un motor de búsqueda tipo Elasticsearch.
+ * Hook personalizado para obtener el catálogo de productos
+ * desde el backend real (search-service vía Gateway).
  */
 export function useProductos() {
   const [productos, setProductos] = useState([]);
@@ -16,23 +13,28 @@ export function useProductos() {
   useEffect(() => {
     let estaMontado = true;
 
-    // Simulamos una llamada asíncrona con un pequeño retraso.
-    const idTimeout = setTimeout(() => {
-      if (!estaMontado) return;
-
+    async function cargarProductos() {
       try {
-        setProductos(productosSimulados);
-        setEstaCargando(false);
+        setEstaCargando(true);
+        const data = await obtenerProductos();
+        if (estaMontado) {
+          setProductos(data);
+        }
       } catch (err) {
-        setError(err);
-        setEstaCargando(false);
+        if (estaMontado) {
+          setError(err);
+        }
+      } finally {
+        if (estaMontado) {
+          setEstaCargando(false);
+        }
       }
-    }, 400); // 400 ms para poder visualizar el estado de carga
+    }
 
-    // Cleanup del efecto cuando se desmonta el componente.
+    cargarProductos();
+
     return () => {
       estaMontado = false;
-      clearTimeout(idTimeout);
     };
   }, []);
 

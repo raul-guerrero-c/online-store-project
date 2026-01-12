@@ -58,6 +58,17 @@ public class OrderController {
     }
 
     /**
+     * Lista todos los pedidos.
+     *
+     * GET /orders
+     */
+    @GetMapping
+    public ResponseEntity<List<OrderResponseDto>> getAllOrders() {
+        List<OrderResponseDto> orders = orderService.getAllOrders();
+        return ResponseEntity.ok(orders);
+    }
+
+    /**
      * Registra una devolución para un pedido concreto.
      *
      * POST /orders/{id}/returns

@@ -105,6 +105,14 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public List<OrderResponseDto> getAllOrders() {
+        return orderHeaderRepository.findAll().stream()
+                .map(this::mapToOrderResponseDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public ReturnResponseDto createReturn(Long orderId, CreateReturnRequestDto request) {
         // Buscar la cabecera del pedido.
         OrderHeader order = orderHeaderRepository.findById(orderId)
