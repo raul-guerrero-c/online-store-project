@@ -1,10 +1,26 @@
-# backend/cloud-gateway/src/main/resources/application.yml
 server:
   port: 8081
 
 spring:
   application:
     name: cloud-gateway
+
+  cloud:
+    gateway:
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "http://localhost:5173"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
 
 eureka:
   client:
