@@ -15,6 +15,7 @@ public class CorsGlobalConfig {
 
         // IMPORTANTE: en desarrollo permitimos localhost
         config.addAllowedOrigin("http://localhost:5173");
+        config.addAllowedOrigin("https://online-store-frontend-lemon.vercel.app");
         //config.addAllowedOrigin("https://rgsoftwaredeveloper.com");
         //config.addAllowedOrigin("https://api.rgsoftwaredeveloper.com");
         config.addAllowedMethod("*");
