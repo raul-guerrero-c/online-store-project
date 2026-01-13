@@ -9,7 +9,8 @@ export default defineConfig({
     // Redirige /api/* hacia el backend objetivo (producción o local según quieras probar).
     proxy: {
       '/api': {
-        target: 'http://74.208.73.139:8081',
+        //target: 'http://localhost:8081',
+        target: '{VITE_API_BASE_URL}',
         changeOrigin: true,
         secure: false,
         rewrite: (path) => path.replace(/^\/api/, '/api'),
